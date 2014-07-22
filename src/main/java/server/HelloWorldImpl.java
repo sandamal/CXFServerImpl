@@ -10,6 +10,7 @@ public class HelloWorldImpl implements HelloWorld {
     public String sayHi(String text) {
 
         System.out.println("sayHi called");
+        System.out.println("1");
         return "Hello " + text;
     }
 }

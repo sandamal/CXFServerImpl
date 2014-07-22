@@ -4,9 +4,11 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.continuations.Continuation;
 import org.apache.cxf.continuations.ContinuationProvider;
+import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.phase.Phase;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -17,13 +19,14 @@ public class CustomInterceptor extends AbstractSoapInterceptor {
 
 
     public CustomInterceptor() {
-        super(Phase.INVOKE);
+        super(Phase.READ);
     }
 
     @Override
     public void handleMessage(SoapMessage soapMessage) throws Fault {
         String contentType = (String) soapMessage.get(SoapMessage.CONTENT_TYPE);
         System.out.println("--------"+contentType);
+        System.out.println("Intercepted");
 
 /*
         ContinuationProvider provider = (ContinuationProvider)soapMessage.get(ContinuationProvider.class.getName());
