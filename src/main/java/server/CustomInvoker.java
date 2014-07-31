@@ -3,10 +3,9 @@ package server;
 import org.apache.cxf.continuations.Continuation;
 import org.apache.cxf.continuations.ContinuationProvider;
 import org.apache.cxf.message.Exchange;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.service.invoker.AbstractInvoker;
-import org.springframework.core.task.TaskExecutor;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
@@ -29,6 +28,7 @@ public class CustomInvoker extends AbstractInvoker {
     public Object invoke(Exchange exchange, Object o) {
         System.out.println("Invoked!!!!");
 
+
         ContinuationProvider continuationProvider = (ContinuationProvider) exchange.getInMessage().get(ContinuationProvider.class.getName());
         final Continuation continuation = continuationProvider.getContinuation();
 
@@ -37,12 +37,13 @@ public class CustomInvoker extends AbstractInvoker {
             if(continuation.isNew()){
                 //This is a new request
                 //execute a task asynchronously
-                FutureTask futureTask = new FutureTask(new RequestHandler(exchange,continuation));
+                FutureTask futureTask = new FutureTask(new InvokerRequestHandler(exchange,continuation));
                 continuation.setObject(futureTask);
                 System.out.println("Suspending the main thread");
-                continuation.suspend(10000);
+                continuation.suspend(0);
                 System.out.println("Starting the second thread");
                 futureTask.run();
+                System.out.println("This is the first thread");
 
             }else{
                 FutureTask futureTask = (FutureTask)continuation.getObject();
@@ -55,7 +56,7 @@ public class CustomInvoker extends AbstractInvoker {
                         e.printStackTrace();
                     }
                 } else {
-                    continuation.suspend(10000);
+                    continuation.suspend(0);
                 }
             }
 

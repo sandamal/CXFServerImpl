@@ -24,7 +24,7 @@ public class Client {
         BusFactory.setDefaultBus(bus);
 
         ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-        factory.setAddress("http://localhost:9000/Hello");
+        factory.setAddress("http://localhost:9001/Hello");
 
         HelloWorld client = factory.create(HelloWorld.class);
         System.out.println("Invoke sayHi()....");

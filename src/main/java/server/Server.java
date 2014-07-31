@@ -1,17 +1,12 @@
 package server;
 
-import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
+import org.apache.cxf.bus.CXFBusFactory;
 import org.apache.cxf.bus.spring.SpringBusFactory;
-import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.frontend.ServerFactoryBean;
-import org.apache.cxf.interceptor.Interceptor;
-import org.apache.cxf.message.Message;
-import org.apache.cxf.ws.rm.feature.RMFeature;
 
 import java.net.URL;
-import java.util.List;
 
 /**
  * Created by sandamal on 7/19/14.
@@ -21,8 +16,12 @@ public class Server {
     protected Server() throws Exception{
 
         SpringBusFactory bf = new SpringBusFactory();
+//        CXFBusFactory bf = new CXFBusFactory();
         URL busFile = Server.class.getResource("/server.xml");
         Bus bus = bf.createBus(busFile.toString());
+        CXFBusFactory bbf = new CXFBusFactory();
+        bbf.createBus();
+
 
         BusFactory.setDefaultBus(bus);
 
@@ -30,14 +29,17 @@ public class Server {
         ServerFactoryBean serverFactory = new ServerFactoryBean();
         serverFactory.setBus(bus);
 
-//        serverFactory.getInInterceptors().add(new CustomInterceptor());
+        serverFactory.getInInterceptors().add(new CustomInterceptor());
+        serverFactory.getInInterceptors().add(new MessageInterceptor());
         serverFactory.setInvoker(new CustomInvoker(helloWorld));
 
-
-        serverFactory.setServiceClass(HelloWorld.class);
-        serverFactory.setAddress("http://localhost:9000/Hello");
+        //serverFactory.setServiceClass(HelloWorld.class);
         serverFactory.setServiceBean(helloWorld);
+        serverFactory.setAddress("http://localhost:9001/Hello");
         serverFactory.create();
+
+
+        System.out.println("bla bla bla");
 
     }
 

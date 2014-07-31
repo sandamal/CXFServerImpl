@@ -26,6 +26,8 @@
                 <wsrm-policy:RMAssertion>
                     <wsrm-policy:BaseRetransmissionInterval Milliseconds="4000"/>
                     <wsrm-policy:AcknowledgementInterval Milliseconds="2000"/>
+<!--                    <wsrm-policy:BaseRetransmissionInterval Milliseconds="8000"/>
+                    <wsrm-policy:AcknowledgementInterval Milliseconds="6000"/>-->
                 </wsrm-policy:RMAssertion>
                 <wsrm-mgr:destinationPolicy>
                     <wsrm-mgr:acksPolicy intraMessageThreshold="0"/>
